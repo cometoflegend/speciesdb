@@ -1,62 +1,84 @@
 import React, {useEffect, useState} from 'react';
 
-const addEspecie = (/* handler de añadir especie */) => {
+const AddEspecie = () => {
 
     const [especie,setEspecie] = useState({
 
         id:'',nombre:'',periodo:'',habitat:'',causas:[],imagen:null,
 
     });
+    const [causa, setCausa] = useState('');
 
+    useEffect(() => {
+        setEspecie(prev => ({ ...prev, id: prev+1 }));
+    }, []);
 
-    /* 
-    
-        constantes a añadir;
+    const handleImg = (e) => {
 
-        - añadir foto
-        - handler de cambios
-        - añadir causas de extinción
-        - submit del formulario
-
-       */
-
-    const handleImg = () => {
-
-
+        const img = e.target.files[0];
+        setEspecie({...especie, imagen:img});
 
     }
 
-    const handleCambio = () => {
+    const handleCambio = (e) => {
 
-
-
-    }
-
-    const addCausa = () => {
-
-
+        const {name,value} = e.target;
+        setEspecie({...especie, [name]:value});
 
     }
 
-    const submitForm = () => {
+    const addCausa = (e) => {
 
+        e.preventDefault();
+
+        const causaInput = causa.trim();
+
+        if (causaInput && !especie.causas.includes(causaInput)) {
+
+            setEspecie(prevState => ({...prevState, causas: [...prevState.causas, causaInput]}))
+
+        }
+
+        setCausa('');
+
+    }
+
+    const submitForm = (e) => {
+
+        e.preventDefault();
+        console.log('Añadido con éxito: ',especie);
         
     }
 
 return (
 
-    <form onSubmit/*={handler de submit}*/>
+    <form onSubmit={submitForm}>
 
-        <input type="text" name="id" placeholder="ID" value={especies.id} /* onChange={handler de cambios} */ required/>
-        <input type="text" name="nombre" placeholder="Nombre" value={especies.nombre} /* onChange={handler de cambios} */ required/>
-        <input type="text" name="periodo" placeholder="Periodo de extinción" value={especies.periodo} /* onChange={handler de cambios} */ required/>
-        <input type="text" name="habitat" placeholder="Hábitat" value={especies.habitat} /* onChange={handler de cambios} */ required/>
-        /* aquí iría un botón que permita añadir varias causas de extinción */
-        <input type="file" accept="image" name="id" /* onChange={handler de añadir foto} */ required/>
-        <button type="submit">Añadir especie</button>
+        <p><input type="text" name="nombre" placeholder="Nombre" value={especie.nombre} onChange={handleCambio} required/></p>
+        <p><input type="text" name="periodo" placeholder="Periodo de extinción" value={especie.periodo} onChange={handleCambio} required/></p>
+        <p><input type="text" name="habitat" placeholder="Hábitat" value={especie.habitat} onChange={handleCambio} required/></p>
+        <div>
+
+            <label>Causas de extinción:</label>
+
+                <input type="text" name="causa" placeholder="Añade causa" onChange={(e) => setCausa(e.target.value)} required/>
+                <button type="submit" onClick={addCausa}>Añadir</button>
+
+                <ul>
+
+                    {especie.causas.map((causa,index) => (<li key={index}>{causa}</li>))}
+
+                </ul>
+
+        </div>
+
+        <input type="file" accept="image/*" name="id" onChange={handleImg} required/>
+        <p><button type="submit">Añadir especie</button></p>
     </form>
 
 
 );
 
-}
+};
+
+export default AddEspecie;
