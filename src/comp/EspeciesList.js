@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { EspeciesContext } from './EspeciesProvider';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Modal, Button } from 'react-bootstrap';
 import '../App.css';
 import AddEspecie from './FormEspecies';
 
@@ -10,6 +10,7 @@ const EspeciesList = () => {
     const [filtroPeriodo, setFiltroPeriodo] = useState('');
     const [filtroHabitat, setFiltroHabitat] = useState('');
     const [filtro, setFiltro] = useState('');
+    const [modal, showModal] = useState(false);
 
     const toggleExpandir = (id) => {
         setExpandir(expandir === id ? null : id);
@@ -30,7 +31,7 @@ const EspeciesList = () => {
     return (
         <div className="especies-container">
 
-            <div className="filtros">
+            <div className="filtros desktop-only">
 
                 <h2>Filtros</h2>
                 <p><label>Período:</label><br />
@@ -47,6 +48,38 @@ const EspeciesList = () => {
                 </div>
 
             </div>
+
+            <button className='fab mobile-only' onClick={() => showModal(true)}></button>
+
+            <Modal show={showModal} onHide={() => showModal(false)}>
+
+                <Modal.Header closeButton>
+
+                    <Modal.Title>+</Modal.Title>
+
+                </Modal.Header>
+
+                <Modal.Body><p><label>Período:</label><br />
+
+                    <input value={filtroPeriodo} onChange={(e) => setFiltroPeriodo(e.target.value)} /></p>
+                    <p><label>Hábitat:</label><br />
+                        <input value={filtroHabitat} onChange={(e) => setFiltroHabitat(e.target.value)} /></p>
+                    <p><label>Búsqueda general:</label><br />
+                        <input type="text" placeholder="Nombre o causa" value={filtro} onChange={(e) => setFiltro(e.target.value)} /></p>
+
+                    <div className="formulario-especie">
+                        <h3>Añadir especie</h3>
+                        <AddEspecie />
+                    </div>
+                </Modal.Body>
+
+                <Modal.Footer>
+
+                    <Button variant="secondary" onClick={() => showModal(false)}>Cerrar menú </Button>
+
+                </Modal.Footer>
+
+            </Modal>
 
             <div className="lista">
 

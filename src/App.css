@@ -53,3 +53,47 @@ main {
   border-top: 1px solid #ccc;
   padding-top: 20px;
 }
+
+.desktop-only {
+
+  display:block !important;
+
+}
+
+.mobile-only {
+
+  display:none !important;
+
+}
+
+.fab {
+
+  position: fixed;
+  bottom: 20px;
+  right:20px;
+  background-color: #007bff;
+  color:white;
+  border:none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  z-index:1000;
+
+}
+
+@media (max-width: 768px) {
+
+  .desktop-only {
+
+    display:none !important;
+  
+  }
+  
+  .mobile-only {
+  
+    display:block !important;
+  
+  }
+
+
+}
