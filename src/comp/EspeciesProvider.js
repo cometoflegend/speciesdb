@@ -1,69 +1,63 @@
-import React, { createContext, useState , useEffect, Children} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const EspeciesContext = createContext();
 
 export const EspeciesProvider = ({ children }) => {
+  const [especiesItems, setEspeciesItems] = useState([]);
+  const [load, setLoad] = useState(true);
+  const [error, setError] = useState(null);
 
-    const [especiesItems, setEspeciesItems] = useState([]);
-    const [load, setLoad] = useState(true);
-    const [error, setError] = useState(null);
+  const LOCAL_KEY = 'especiesData';
 
-    const addToEspecies = (item) => {
-        setEspeciesItems([...especiesItems, item]);
-      };
+  const addToEspecies = (item) => {
+    const newEsp = [...especiesItems, item];
+    setEspeciesItems(newEsp);
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(newEsp));
+  };
 
-    const removeFromEspecies = (nombre) => {
-        setEspeciesItems(especiesItems.filter(item => item.nombre !== nombre));
-      };
+  const removeFromEspecies = (nombre) => {
+    const newEsp = especiesItems.filter(item => item.nombre !== nombre);
+    setEspeciesItems(newEsp);
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(newEsp));
+  };
 
-    const cargarEspecies=(data)=>
-        {
-          const aux_data = [];
-          let i= 0;
-          for(i=0;i<data.length;i++)
-          {
-              let aux_element= data[i];
-              aux_element["id"]=i;
-              aux_data.push(aux_element);
-          }
+  const fetchEspecies = async () => {
+    try {
+      const stored = localStorage.getItem(LOCAL_KEY);
 
-        setEspeciesItems(aux_data); 
-      
-    }
-
-    const fetchEspecies = async () => {
-
-        try {
-
-            const response = await fetch('/especies.json');
-
-            if (!response.ok) {
-
-                throw new Error('Error al cargar los datos');
-
-            }
-
-            const data = await response.json();
-            
-            cargarEspecies(data);
-
-        } catch (error) {
-
-            setError(error);
-            setLoad(false);
-
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.length > 0) {
+          setEspeciesItems(parsed);
+          setLoad(false);
+          return;
         }
+      }
 
-    };
+      const response = await fetch('/especies.json');
+      if (!response.ok) {
+        throw new Error('Error al cargar los datos');
+      }
 
-    useEffect(() => {
-        fetchEspecies();
-      }, []);
+      const data = await response.json();
+      setEspeciesItems(data);
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(data));
 
-    return (
-        <EspeciesContext.Provider value={{ especiesItems, addToEspecies, removeFromEspecies }}>
-          {children}
-        </EspeciesContext.Provider>
-    );
+    } catch (err) {
+      console.error(err);
+      setError(err);
+    } finally {
+      setLoad(false);
+    }
+  };
 
+useEffect(() => {
+  fetchEspecies();
+}, []);
+
+return (
+  <EspeciesContext.Provider value={{ especiesItems, addToEspecies, removeFromEspecies, load, error }}>
+    {children}
+  </EspeciesContext.Provider>
+);
 };

@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { EspeciesContext } from './EspeciesProvider';
 import { ListGroup } from 'react-bootstrap';
+import '../App.css';
+import AddEspecie from './FormEspecies';
 
 const EspeciesList = () => {
-    const { especiesItems } = useContext(EspeciesContext);
+    const { especiesItems, removeFromEspecies } = useContext(EspeciesContext);
     const [expandir, setExpandir] = useState(null);
+    const [filtroPeriodo, setFiltroPeriodo] = useState('');
+    const [filtroHabitat, setFiltroHabitat] = useState('');
+    const [filtro, setFiltro] = useState('');
 
     const toggleExpandir = (id) => {
         setExpandir(expandir === id ? null : id);
@@ -14,35 +19,75 @@ const EspeciesList = () => {
         return <div>Cargando...</div>;
     }
 
-    return (
-        <div>
-            <h1>Especies extintas</h1>
-            <ListGroup>
-                {especiesItems.map(item => (
-                    <ListGroup.Item key={item.id}>
-                        <h2 onClick={() => toggleExpandir(item.id)} style={{ cursor: 'pointer' }}>
-                            {item.nombre}
-                        </h2>
+    const filtroEspecies = especiesItems.filter(item => {
+        const checkPeriodo = filtroPeriodo === '' || item.periodo.toLowerCase().includes(filtroPeriodo.toLowerCase());
+        const checkHabitat = filtroHabitat === '' || item.habitat.toLowerCase().includes(filtroHabitat.toLowerCase());
+        const filtroNombre = item.nombre.toLowerCase().includes(filtro.toLowerCase());
+        const filtroCausa = item.causas.some(c => c.toLowerCase().includes(filtro.toLowerCase()));
+        return (checkPeriodo && checkHabitat && (filtro === '' || filtroNombre || filtroCausa));
+    });
 
-                        {expandir === item.id && (
-                            <div>
-                                <p>Periodo: {item.periodo}</p>
-                                <p>Hábitat: {item.habitat}</p>
-                                <p>Causas de extinción:</p>
-                                <ul>
-                                    {item.causas.map((causa, index) => (
-                                        <li key={index}>{causa}</li>
-                                    ))}
-                                </ul>
-                                <p>Imagen:</p>
-                                {item.imagen && (
-                                    <img src={item.imagen} alt={item.nombre} style={{ maxWidth: '350px' }} />
-                                )}
-                            </div>
-                        )}
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
+    return (
+        <div className="especies-container">
+
+            <div className="filtros">
+
+                <h2>Filtros</h2>
+                <p><label>Período:</label><br />
+
+                    <input value={filtroPeriodo} onChange={(e) => setFiltroPeriodo(e.target.value)} /></p>
+                <p><label>Hábitat:</label><br />
+                    <input value={filtroHabitat} onChange={(e) => setFiltroHabitat(e.target.value)} /></p>
+                <p><label>Búsqueda general:</label><br />
+                    <input type="text" placeholder="Nombre o causa" value={filtro} onChange={(e) => setFiltro(e.target.value)} /></p>
+
+                <div className="formulario-especie">
+                    <h3>Añadir especie</h3>
+                    <AddEspecie />
+                </div>
+
+            </div>
+
+            <div className="lista">
+
+                <h1>Especies extintas</h1>
+
+                <ListGroup>
+
+                    {filtroEspecies.map(item => (
+                        <ListGroup.Item key={item.id}>
+                            <h2 onClick={() => toggleExpandir(item.id)} style={{ cursor: 'pointer' }}>
+                                {item.nombre}
+                            </h2>
+                            {expandir === item.id && (
+                                <div>
+                                    <p>Tipo: {item.tipo_animal}</p>
+                                    <p>Período: {item.periodo}</p>
+                                    <p>Hábitat: {item.habitat}</p>
+                                    <p>Causas de extinción:</p>
+                                    <ul>
+                                        {item.causas.map((causa, index) => (
+                                            <li key={index}>{causa}</li>
+                                        ))}
+                                    </ul>
+                                    <p>Imagen:</p>
+                                    {item.imagen && (
+                                        <img src={item.imagen} alt={item.nombre} style={{ maxWidth: '350px' }} />
+                                    )}
+                                    <p>
+                                        <button onClick={() => removeFromEspecies(item.nombre)} style={{ marginTop: '10px' }}>
+                                            Eliminar
+                                        </button>
+                                    </p>
+                                </div>
+                            )}
+                        </ListGroup.Item>
+                    ))}
+
+                </ListGroup>
+
+            </div>
+
         </div>
     );
 };
