@@ -81,6 +81,22 @@ main {
 
 }
 
+.card {
+
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 12px;
+
+}
+
+.lista-especies {
+
+  display:grid;
+  grid-template-columns: repeat(auto-fit);
+  gap:1rem;
+
+}
+
 @media (max-width: 768px) {
 
   .desktop-only {

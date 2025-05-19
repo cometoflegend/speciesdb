@@ -22,7 +22,7 @@ const App = () => {
 
           <div className="navbar-expand-sm container-fluid d-flex justify-content-between">
 
-            <h1>Especies Extintas</h1>
+            <h1 className='mb-0'>Especies Extintas</h1>
 
             <div className='container-fluid  align-items-right'>
               <Navbar expand="lg">
@@ -30,7 +30,7 @@ const App = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
                 <Navbar.Collapse id="basic-navbar-nav">
-                  <Nav className="me-auto">
+                  <Nav className="ms-auto">
                     <Nav.Link as={Link} to="/" className="nav-link">Lista</Nav.Link>
                     <Nav.Link as={Link} to="/timeline" className="nav-link">Línea del Tiempo</Nav.Link>
                     <Nav.Link as={Link} to="/mapa" className="nav-link">Mapa</Nav.Link>

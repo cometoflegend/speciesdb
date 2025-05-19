@@ -66,3 +66,31 @@
 .timeline-item.right::after {
   left: -8px;
 }
+
+
+@media (max-width: 768px) {
+
+  .timeline {
+
+    padding-left:0;
+
+  }
+
+  .timeline-item::before {
+
+    left:50%;
+    transform: translateX(-50%);
+
+  }
+
+  .timeline-content {
+
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+  }
+
+
+}

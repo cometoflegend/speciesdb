@@ -4,6 +4,7 @@ import { EspeciesContext } from './EspeciesProvider';
 import coords from '../data/coords';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import './Mapa.css';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -51,7 +52,7 @@ const Mapa = () => {
   const ubicacionesAgrupadas = agruparPorCoordenadas(especiesItems);
 
   return (
-    <div style={{ height: '600px', width: '100%' }}>
+    <div style={{ height: '600px', width: '100%' }} className='mapa-container'>
       <MapContainer
         center={[20, 0]}
         zoom={2}

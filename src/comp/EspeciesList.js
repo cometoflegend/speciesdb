@@ -10,7 +10,7 @@ const EspeciesList = () => {
     const [filtroPeriodo, setFiltroPeriodo] = useState('');
     const [filtroHabitat, setFiltroHabitat] = useState('');
     const [filtro, setFiltro] = useState('');
-    const [modal, showModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const toggleExpandir = (id) => {
         setExpandir(expandir === id ? null : id);
@@ -49,13 +49,13 @@ const EspeciesList = () => {
 
             </div>
 
-            <button className='fab mobile-only' onClick={() => showModal(true)}></button>
+            <button className='fab mobile-only' onClick={() => setShowModal(true)}>+</button>
 
-            <Modal show={showModal} onHide={() => showModal(false)}>
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
 
                 <Modal.Header closeButton>
 
-                    <Modal.Title>+</Modal.Title>
+                    <Modal.Title>Agregar y Filtrar</Modal.Title>
 
                 </Modal.Header>
 
@@ -75,7 +75,7 @@ const EspeciesList = () => {
 
                 <Modal.Footer>
 
-                    <Button variant="secondary" onClick={() => showModal(false)}>Cerrar menú </Button>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>Cerrar menú</Button>
 
                 </Modal.Footer>
 
@@ -85,10 +85,10 @@ const EspeciesList = () => {
 
                 <h1>Especies extintas</h1>
 
-                <ListGroup>
+                <ListGroup className='lista-especies'>
 
                     {filtroEspecies.map(item => (
-                        <ListGroup.Item key={item.id}>
+                        <ListGroup.Item className="card" key={item.id}>
                             <h2 onClick={() => toggleExpandir(item.id)} style={{ cursor: 'pointer' }}>
                                 {item.nombre}
                             </h2>
@@ -105,7 +105,7 @@ const EspeciesList = () => {
                                     </ul>
                                     <p>Imagen:</p>
                                     {item.imagen && (
-                                        <img src={item.imagen} alt={item.nombre} style={{ maxWidth: '350px' }} />
+                                        <img src={item.imagen} alt={item.nombre} style={{ maxWidth: '350px', objectFit:'cover' }} />
                                     )}
                                     <p>
                                         <button onClick={() => removeFromEspecies(item.nombre)} style={{ marginTop: '10px' }}>
