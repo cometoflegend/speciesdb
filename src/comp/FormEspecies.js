@@ -80,7 +80,7 @@ const AddEspecie = () => {
                     <label>Causas de extinción:</label>
 
                     <input type="text" name="causa" placeholder="Añade causa" onChange={(e) => setCausa(e.target.value)} required />
-                    <button type="button" onClick={addCausa}>Añadir</button>
+                    <button type="button" onClick={addCausa} data-testid="btn-add-causa">Añadir</button>
 
                     <ul>
 
@@ -92,7 +92,7 @@ const AddEspecie = () => {
 
                 <input type="file" accept="image/*" name="id" onChange={handleImg} required />
                 
-                <p><button type="submit" style={{ marginTop: '10px' }}>Añadir especie</button></p>
+                <p><button type="submit" style={{ marginTop: '10px' }} data-testid="btn-add">Añadir especie</button></p>
             </form>
 
 

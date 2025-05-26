@@ -90,7 +90,7 @@ const Timeline = () => {
 
   return (
     <div className="timeline">
-      <h2 style={{ textAlign: 'center', marginBottom: '40px' }}>Línea de Tiempo de Especies Extintas</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '40px' }}>Línea del Tiempo de Especies Extintas</h2>
       {especiesOrdenadas.map((esp, index) => (
         <div key={esp.id} className={`timeline-item ${index % 2 === 0 ? 'left' : 'right'}`}>
           <div className="timeline-content">
